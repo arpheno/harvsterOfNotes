@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.text import slugify
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-# decorator which overrides crsftoken functionality. DO NOT TRY THIS ON PRODUCTION SERVER! 
+# decorator which overrides crsftoken functionality. DO NOT TRY THIS ON PRODUCTION SERVER!
 # Use Django x-csrf (https://docs.djangoproject.com/en/1.8/ref/csrf/) to get Cookie
 #from django.views.decorators.csrf import csrf_exempt
 
@@ -23,23 +23,19 @@ Code is repeated in add_tagg and add_note, and pagination is repeated two places
 Since there is just this block which is repeated I do not prioritize to learn class based views now.
 '''
 
-def increase_num_likes(request):
-	id = request.GET.get('id', None)
-	if id is None:
-		note = get_object_or_404(Note, id=id)
-	else:
-		note = None
-	note.num_likes += 1
-	note.save()
-	data = {'num_likes_updated': note.num_likes}
-	return JsonResponse(data)
+def increase_num_likes(request,id):
+    note = get_object_or_404(Note, id=id)
+    note.num_likes += 1
+    note.save()
+    data = {'num_likes_updated': note.num_likes}
+    return JsonResponse(data)
 
 '''
 def vote(request):
 	note = get_object_or_404(Note, pk=request.POST.get('note'))
 	note.num_likes += 1
 	note.save()
-	return HttpResponse()	
+	return HttpResponse()
 '''
 
 def detail_note(request):
@@ -66,7 +62,7 @@ def tag_search(request, **kwargs):
 		notes = paginator.page(1)
 	except EmptyPage:
 		notes = paginator.page(paginator.num_pages)
-	
+
 	context = {
 		'notes': notes,
 		'tag': tag}
@@ -122,7 +118,7 @@ def add_note(request):
 			note.delete()
 			messages.add_message(request, messages.INFO, 'Note Deleted!')
 			return HttpResponseRedirect(reverse('notes:index'))
-		
+
 		# new note
 		form = NoteForm(request.POST, instance=note)
 		if form.is_valid():

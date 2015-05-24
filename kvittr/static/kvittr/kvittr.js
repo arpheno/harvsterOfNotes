@@ -40,7 +40,7 @@ $(document).ready(function(){
 		})
 		.done(function(data){
 			var num_likes_updated = data['num_likes_updated'];
-			$("$num_likes_div").html(num_likes_updated)
+			$("#num_likes_div").html(num_likes_updated)
 		})
 	});
 });
@@ -53,14 +53,14 @@ $(document).ready(function() {
 			url: "/vote",
 			data: {"note": noteID},
 			success: function() {
-				// vote only once 
+				// vote only once
 				$("#note-vote-" + noteID).hide();
 			},
 			headers: {
-				'X-CSRFToken': csrftoken;	
+				'X-CSRFToken': csrftoken;
 			}
 		});
-		// don't reload page 
+		// don't reload page
 		return false;
 	}
 
